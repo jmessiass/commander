@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+  <title>commander</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <style type="text/css">
+    body{
+      background-color: #282a36;
+      font-family: 'Fira Code';font-size: 14px;
+    }
+    table{
+      counter-reset: row-num;
+    }
+    table tr{
+      counter-increment: row-num;
+      cursor: copy;
+      border-bottom: solid 1px #28a745;
+      border-top: solid 1px #28a745;
+    }
+    table tbody tr:hover{
+      background-color: #28a745;
+    }
+    table tbody tr td:first-child::before {
+      content: counter(row-num);
+    }
+    input{
+      margin: 0.5em 0;
+    }
+    .alert{
+      display: none;
+    }
+    /*Floating Back-To-Top Button*/
+    #myBtn {
+      position: sticky;
+      bottom: 10px;
+      float: right;
+      right: 5.5%;
+      left: 77.25%;
+      max-width: 30px;
+      width: 100%;
+      font-size: 12px;
+      border-color: rgba(85, 85, 85, 0.2);
+      background-color: rgb(100,100,100);
+      padding: .5px;
+      border-radius: 4px;
+    }
+    /*On Hover Color Change*/
+    #myBtn:hover {
+      background-color: #7dbbf1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-10">
+        <form class="form-inline">
+          <input class="form-control mr-sm-2" type="search" autofocus="" placeholder="comando" id="command" aria-label="Comando" onkeyup="filterCommands()">
+        </form>
+      </div>
+      <div class="col"></div>
+    </div>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col-10">
+        <table class="table text-white table-borderless text-left" id="commands">
+          <tbody>
+            <tr onclick="copyCommand('nc1')">
+              <td></td>
+              <td>nc</td>
+              <td id="nc1">nc -lnvp 4120</td>
+              <td>abrindo a porta 4120 pelo netcat para aguadar uma conexão</td>
+            </tr>
+            <tr onclick="copyCommand('py1')">
+              <td></td>
+              <td>python</td>
+              <td id="py1">python -c 'import os;os.system("/bin/bash")'</td>
+              <td>chamar uma shell em python</td>
+            </tr>
+            <tr onclick="copyCommand('ph1')">
+              <td></td>
+              <td>php</td>
+              <td id="ph1">php -r 'shell_exec("/bin/bash");'</td>
+              <td>chamar uma shell em php</td>
+            </tr>
+            <tr onclick="copyCommand('py2')">
+              <td></td>
+              <td>python</td>
+              <td id="py2">python -c 'import pty;pty.spawn("/bin/bash")'</td>
+              <td>deixar a shell mais humana</td>
+            </tr>
+            <tr onclick="copyCommand('nm1')">
+              <td></td>
+              <td>nmap</td>
+              <td id="nm1">nmap -v -Pn -sT X.X.X.X --open</td>
+              <td>scan TCP rápido</td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div class="col"></div>
+    </div>
+    <button id="myBtn"><a href="#top" style="color: white">TOP</a></button>
+    <script>
+    function filterCommands() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("command");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("commands");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 0; i < tr.length; i++) {
+        td1 = tr[i].getElementsByTagName("td")[1];
+        td3 = tr[i].getElementsByTagName("td")[3];
+        if (td1 || td3) {
+          txtValue1 = td1.textContent || td1.innerText;
+          txtValue3 = td3.textContent || td3.innerText;
+          if (txtValue1.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+    } else if (txtValue3.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+    } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+    function copyCommand(command) {
+      var range = document.createRange();
+      range.selectNode(document.getElementById(command));
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand("copy");
+      window.getSelection().removeAllRanges();
+      console.log(command);
+    }
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.0.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
