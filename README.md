@@ -56,4 +56,4 @@ After you need to change the command line and the description from command.
 ...
 ```
 
-Save and relauch your browser.
+Save and relaunch your browser.
